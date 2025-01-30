@@ -19,21 +19,32 @@ def binary_search_rotated(arr, target, rotation_index):
     # TODO: Check if the rotation_index is 0, meaning the array is not rotated.
     
     # TODO: Determine which half (before or after rotation_index) the target belongs to.
+
+    n = len(arr)
     
-    def binary_search(arr, left, right, target):
-        """
-        Performs a binary search on a sorted array within the specified range.
-        
-        :param arr: List[int] - The sorted array to search in.
-        :param left: int - The left boundary of the search range (inclusive).
-        :param right: int - The right boundary of the search range (inclusive).
-        :param target: int - The value to search for.
-        :return: bool - True if the target is in the array, False otherwise.
-        """
-        # TODO: Implement standard binary search logic.
-        
+    if n == 0:
         return False
     
-    # TODO: Perform binary search on the appropriate half using the nested function.
+    if rotation_index == 0:
+        # Array is not rotated; perform standard binary search
+        left, right = 0, n - 1
+    elif target >= arr[rotation_index] and target <= arr[n - 1]:
+        # Target is in the rotated half
+        left, right = rotation_index, n - 1
+    else:
+        # Target is in the non-rotated half
+        left, right = 0, rotation_index - 1
     
-    return False  # TODO: Replace this with actual return value
+    def binary_search(arr, left, right, target):
+        """Performs binary search on a sorted subarray."""
+        while left <= right:
+            mid = left + (right - left) // 2
+            if arr[mid] == target:
+                return True
+            elif arr[mid] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return False
+    
+    return binary_search(arr, left, right, target)
